@@ -1,0 +1,6 @@
+def driver7():
+    ARG_CHANGE_Q
+    ARG_CHANGE_A
+    ARG_CHANGE_V
+	movej(cmd_servo_q, cmd_servo_a, cmd_servo_v, t=0, r=0)
+end
