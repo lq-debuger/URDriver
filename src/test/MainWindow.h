@@ -4,6 +4,7 @@
 #define URDRIVERCPP_MAINWINDOW_H
 
 #include <QWidget>
+#include "UrDriver.h"
 #include <QFormLayout>
 #include <QLineEdit>
 #include <QPushButton>
@@ -11,8 +12,8 @@
 class MainWindow: public QWidget {
 private:
     QFormLayout *layout1;
-    QLineEdit *ip;
-    QLineEdit *port;
+    QLineEdit *ipedit;
+    QLineEdit *portedit;
     QLabel *connectStatus;
     QPushButton *connectBtn;
     QPushButton *disconnectBtn;
@@ -34,6 +35,11 @@ public:
     MainWindow(QWidget* parent = Q_NULLPTR);
 
     ~MainWindow();
+
+    void initUI();
+
+    //连接机械臂
+    void connectToRobot();
 };
 
 

@@ -2,17 +2,26 @@
 #include "MainWindow.h"
 
 MainWindow::MainWindow(QWidget* parent):QWidget(parent){
-    //初始化界面
+    initUI();
+
+    // 关联信号与槽函数
+    connect(connectBtn, &QPushButton::clicked, this, &MainWindow::connectToRobot);
+}
+
+/*
+ * 初始化界面
+ * */
+void MainWindow::initUI() {//初始化界面
     layout1 = new QFormLayout();
     setLayout(layout1);
 
-    ip = new QLineEdit("127.0.0.1");
-    port = new QLineEdit("30003");
+    ipedit = new QLineEdit("127.0.0.1");
+    portedit = new QLineEdit("30003");
     connectStatus = new QLabel("未连接");
     connectBtn = new QPushButton("连接机械臂");
     disconnectBtn = new QPushButton("断开连接");
-    layout1->addRow("ip", ip);
-    layout1->addRow("port", port);
+    layout1->addRow("ip", ipedit);
+    layout1->addRow("port", portedit);
     layout1->addRow("连接状态 ", connectStatus);
     layout1->addRow(connectBtn);
     layout1->addRow(disconnectBtn);
@@ -46,8 +55,15 @@ MainWindow::MainWindow(QWidget* parent):QWidget(parent){
     layout1->addRow("ry:", ryedit);
     layout1->addRow("rz:", rzedit);
     layout1->addRow(movelBtn);
-
-
 }
 
 MainWindow::~MainWindow() {}
+
+//连接机械臂
+void MainWindow::connectToRobot() {
+    //获取ip和port
+    QString ip = ipedit->text();
+    int port = portedit->text().toUInt();
+    //调用URDriver 中调用connectToRobot的方法
+    UrDriver::getInstance()->connectTORobot();
+}
