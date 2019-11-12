@@ -4,8 +4,9 @@
 MainWindow::MainWindow(QWidget* parent):QWidget(parent){
     initUI();
 
-    // 关联信号与槽函数
-    connect(connectBtn, &QPushButton::clicked, this, &MainWindow::connectToRobot);
+    //处理信号和槽
+    this->signalAndSlot();
+
     //处理回调函数
     this->setCallback();
 }
@@ -74,7 +75,34 @@ void MainWindow::connectToRobot() {
 //设置回调函数
 void MainWindow::setCallback() {
     //设置连接成功的回调函数
-    UrDriver::getInstance()->setConnectCallback([]{
-        cout<<"连接成功" << endl;
+    UrDriver::getInstance()->setConnectCallback([this]{
+        //cout<<"连接成功" << endl;
+        connectStatus->setText("已连接");
     });
+
+    //设置断开连接的回调函数
+    UrDriver::getInstance()->setDisconnectCallback([this]{
+        connectStatus->setText("断开连接");
+    });
+}
+
+
+
+/**
+ * 处理signal和slot函数
+ */
+void MainWindow::signalAndSlot() {
+    //连接机械臂的信号和槽
+    connect(connectBtn, &QPushButton::clicked, this, &MainWindow::connectToRobot);
+
+    //断开连接的信号和槽
+    connect(disconnectBtn,&QPushButton::clicked,this,&MainWindow::disConnectToRobot);
+}
+
+/**
+ * 断开连接
+ */
+void MainWindow::disConnectToRobot() {
+    //调用driver的方法
+    UrDriver::getInstance()->disConnectToRobot();
 }

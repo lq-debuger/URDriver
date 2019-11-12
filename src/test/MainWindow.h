@@ -41,6 +41,12 @@ public:
     //连接机械臂
     void connectToRobot();
 
+    //断开连接
+    void disConnectToRobot();
+
+    //处理signal和slot函数
+    void signalAndSlot();
+
     //设置回调函数
     void setCallback();
 };
