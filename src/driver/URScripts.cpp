@@ -67,9 +67,9 @@ void URScripts::changeScript(moveType type, double *data, double acc, double vel
     //关节角度
     arr[0] = param;
     //加速度
-    arr[1] = acc;
+    arr[1] = "cmd_servo_a=" + QString::number(acc);
     //速度
-    arr[2] = vel;
+    arr[2] = "cmd_servo_v=" + QString::number(vel);
     //重置发送的脚本内容
     commandString = baseString;
     //替换脚本中的ARG_CHANGE_Q ARG_CHANGE_A ARG_CHANGE_V
