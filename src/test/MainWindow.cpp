@@ -6,6 +6,8 @@ MainWindow::MainWindow(QWidget* parent):QWidget(parent){
 
     // 关联信号与槽函数
     connect(connectBtn, &QPushButton::clicked, this, &MainWindow::connectToRobot);
+    //处理回调函数
+    this->setCallback();
 }
 
 /*
@@ -63,7 +65,16 @@ MainWindow::~MainWindow() {}
 void MainWindow::connectToRobot() {
     //获取ip和port
     QString ip = ipedit->text();
-    int port = portedit->text().toUInt();
+    int port = portedit->text().toInt();
     //调用URDriver 中调用connectToRobot的方法
-    UrDriver::getInstance()->connectTORobot();
+    UrDriver::getInstance()->connectTORobot(ip,port);
+
+}
+
+//设置回调函数
+void MainWindow::setCallback() {
+    //设置连接成功的回调函数
+    UrDriver::getInstance()->setConnectCallback([]{
+        cout<<"连接成功" << endl;
+    });
 }

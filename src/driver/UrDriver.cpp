@@ -11,7 +11,11 @@ shared_ptr<UrDriver> UrDriver::getInstance() {
 }
 
 UrDriver::UrDriver() {
-    cout << "创建内存" << endl;
+    connect(&socket, &QTcpSocket::connected, [this] {
+        //调用回调函数
+        connectCallback();
+    }
+    );
 }
 
 UrDriver::~UrDriver() {
@@ -21,7 +25,16 @@ UrDriver::~UrDriver() {
 /*
  * 连接机械臂
  * */
-void UrDriver::connectTORobot() {
-    cout << "连接成功" << endl;
-
+void UrDriver::connectTORobot(QString ip,int port) {
+//    cout << "连接成功" << endl;
+    socket.connectToHost(ip, port);
 }
+
+/*
+ * 接收连接的回调函数
+ * */
+void UrDriver::setConnectCallback(function<void()> connectCallback) {
+    this->connectCallback = connectCallback;
+}
+
+

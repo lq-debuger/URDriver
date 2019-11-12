@@ -40,6 +40,9 @@ public:
 
     //连接机械臂
     void connectToRobot();
+
+    //设置回调函数
+    void setCallback();
 };
 
 
