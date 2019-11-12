@@ -66,4 +66,49 @@ void UrDriver::signalAndSlot() {
     });
 }
 
+/**
+ * moveL
+ * @param joints
+ * @param acc
+ * @param vel
+ */
+void UrDriver::moveL(double *pose, double acc, double vel) {
+    //替换脚本
+    scripts.moveL(pose, acc, vel);
+    //发送数据
+    sendscript();
+}
+
+/**
+ * moveJ
+ * @param pose
+ * @param acc
+ * @param vel
+ */
+void UrDriver::moveJ(double *pose, double acc, double vel) {
+    //替换脚本
+    scripts.moveJ(pose, acc, vel);
+    //发送数据
+    sendscript();
+}
+
+/**
+ * 加载脚本
+ * @param path
+ */
+void UrDriver::loadScripts(string path) {
+    scripts.loadScripts(path);
+}
+
+/**
+ * 发送脚本数据
+ */
+void UrDriver::sendscript() {
+    //获取脚本内容
+    QString src = scripts.getCommandScript();
+    qDebug()<< src << endl;
+    //发送数据据
+    socket.write(src.toUtf8());
+}
+
 

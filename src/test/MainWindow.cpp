@@ -1,7 +1,10 @@
 
 #include "MainWindow.h"
 
-MainWindow::MainWindow(QWidget* parent):QWidget(parent){
+MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
+    //加载脚本
+    UrDriver::getInstance()->loadScripts("../data/UrDriverScript/Driver7");
+
     initUI();
 
     //处理信号和槽
@@ -96,7 +99,12 @@ void MainWindow::signalAndSlot() {
     connect(connectBtn, &QPushButton::clicked, this, &MainWindow::connectToRobot);
 
     //断开连接的信号和槽
-    connect(disconnectBtn,&QPushButton::clicked,this,&MainWindow::disConnectToRobot);
+    connect(disconnectBtn, &QPushButton::clicked, this, &MainWindow::disConnectToRobot);
+
+    //moveL的信号与槽函数
+    connect(movelBtn, &QPushButton::clicked, this, &MainWindow::moveL);
+    //moveJ的信号与槽函数
+    connect(movejBtn, &QPushButton::clicked, this, &MainWindow::moveJ);
 }
 
 /**
@@ -105,4 +113,35 @@ void MainWindow::signalAndSlot() {
 void MainWindow::disConnectToRobot() {
     //调用driver的方法
     UrDriver::getInstance()->disConnectToRobot();
+}
+
+/**
+ * movel的函数
+ */
+void MainWindow::moveJ() {
+    //获取六个关节的值
+    double j1 = joint1->text().toDouble()*DEGREETORAD;
+    double j2 = joint2->text().toDouble()*DEGREETORAD;
+    double j3 = joint3->text().toDouble()*DEGREETORAD;
+    double j4 = joint4->text().toDouble()*DEGREETORAD;
+    double j5 = joint5->text().toDouble()*DEGREETORAD;
+    double j6 = joint6->text().toDouble()*DEGREETORAD;
+    double  arr[6]={j1,j2,j3,j4,j5,j6};
+    //调用driver的方法
+    UrDriver::getInstance()->moveJ(arr);
+}
+
+/**
+ * moveJ的函数
+ */
+void MainWindow::moveL() {
+    //获取位置和姿态的数据
+    double x = xedit->text().toDouble();
+    double y = yedit->text().toDouble();
+    double z = zedit->text().toDouble();
+    double rx = rxedit->text().toDouble();
+    double ry = ryedit->text().toDouble();
+    double rz = rzedit->text().toDouble();
+    double pose[6] = {x, y, z, rx, ry, rz};
+    UrDriver::getInstance()->moveL(pose);
 }

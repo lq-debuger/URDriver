@@ -9,8 +9,11 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QLabel>
+#include <math.h>
 class MainWindow: public QWidget {
 private:
+    //角度转换成弧度
+    double DEGREETORAD = M_PI/180;
     QFormLayout *layout1;
     QLineEdit *ipedit;
     QLineEdit *portedit;
@@ -49,6 +52,12 @@ public:
 
     //设置回调函数
     void setCallback();
+
+    //moveL
+    void moveL();
+
+    //moveJ
+    void moveJ();
 };
 
 

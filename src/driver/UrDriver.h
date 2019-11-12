@@ -8,9 +8,11 @@
 #include <QTcpSocket>
 #include <QString>
 #include <functional>
+#include "URScripts.h"
 using namespace std;
 class UrDriver: public QObject {
 private:
+    URScripts scripts;
     //连接成功的回调函数
     function<void()> connectCallback;
     //断开连接的回调函数
@@ -40,6 +42,17 @@ public:
     //接受断开连接的回调函数
     void setDisconnectCallback(function<void()> disConnectCallback);
 
+    //加载脚本
+    void loadScripts(string path);
+
+    //moveL
+    void moveL(double *pose, double acc = 1.2, double vel = 0.25);
+
+    //moveJ
+    void moveJ(double *pose, double acc = 1.4, double vel = 1.05);
+
+    //发送脚本数据
+    void sendscript();
 
 };
 
