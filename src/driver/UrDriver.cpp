@@ -64,6 +64,43 @@ void UrDriver::signalAndSlot() {
     connect(&socket,&QTcpSocket::disconnected,[this]{
         disConnectCallback();
     });
+
+    //socket连接后返回数据时的信号和槽函数
+    connect(&socket,&QTcpSocket::readyRead,[this]{
+        QByteArray data = socket.readAll();
+        //解析数据
+        URData urData;
+        parseData(data, urData);
+        //判断是否要执行，从队列中获取第一个执行命令
+    });
+}
+
+/**
+ * 解析socket收到的数据，并复制给URData
+ * @param data socket返回的数据
+ * @param urData URdata 结构体
+ */
+void UrDriver::parseData(QByteArray array, URData urData) {
+    //定义char 数据接受array中的数据
+    char rawData[1108];
+    memcpy(rawData, array.data(), array.size());
+    //先接收前四个字节，对应结构体urdata中的第一个数据，注意结构的内存对齐
+    char *p = rawData;
+    //rawdata中数据的存储时大端存储，而结构体中的数据时小端存储
+    //把前四个字节的数据转换成小端
+    reverseData(p, 4);
+//    cout << p <<endl;
+    //把前四个字节的数据复制给urData结构体的第一个数据类型中
+    memcpy(&urData, p, 4);
+    //检测一下是否解析正确
+//    cout << urData.MsgSize << endl;
+    //后边的数据都是double数据，8个字节，根据结构体的内存对齐，应从结构体的第八个数据开始
+    for (char *q = p + 4; q < p + sizeof(rawData) - 8; q += 8) {
+        //进行大小端转换
+        reverseData(q, 8);
+    }
+    //将后边的数据整体复制给urData结构体
+    mempcpy((char *) (&urData), p + 4, array.size() - 4);
 }
 
 /**
@@ -73,10 +110,13 @@ void UrDriver::signalAndSlot() {
  * @param vel
  */
 void UrDriver::moveL(double *pose, double acc, double vel) {
-    //替换脚本
-    scripts.moveL(pose, acc, vel);
-    //发送数据
-    sendscript();
+//    //替换脚本
+//    scripts.moveL(pose, acc, vel);
+//    //发送数据
+//    sendscript();
+
+    //添加指令
+    addInstruction(MOVEL, pose, acc, vel);
 }
 
 /**
@@ -86,10 +126,13 @@ void UrDriver::moveL(double *pose, double acc, double vel) {
  * @param vel
  */
 void UrDriver::moveJ(double *pose, double acc, double vel) {
-    //替换脚本
-    scripts.moveJ(pose, acc, vel);
-    //发送数据
-    sendscript();
+//    //替换脚本
+//    scripts.moveJ(pose, acc, vel);
+//    //发送数据
+//    sendscript();
+
+    //添加指令
+    addInstruction(MOVEJ, pose, acc, vel);
 }
 
 /**
@@ -106,9 +149,25 @@ void UrDriver::loadScripts(string path) {
 void UrDriver::sendscript() {
     //获取脚本内容
     QString src = scripts.getCommandScript();
-    qDebug()<< src << endl;
+//    qDebug()<< src << endl;
     //发送数据据
     socket.write(src.toUtf8());
+}
+
+/**
+ * 给指令队列中添加指令
+ * @param type
+ * @param data
+ * @param acc
+ * @param vel
+ */
+void UrDriver::addInstruction(moveType type, double data[6], double acc, double vel) {
+    Instruction instruction;
+    instruction.type = type;
+    mempcpy(instruction.data, data, 6 * sizeof(double));
+    instruction.acc = acc;
+    instruction.vel = vel;
+    instruction_queue.push(instruction);
 }
 
 

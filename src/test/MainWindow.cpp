@@ -32,12 +32,12 @@ void MainWindow::initUI() {//初始化界面
     layout1->addRow(connectBtn);
     layout1->addRow(disconnectBtn);
 
-    joint1 = new QLineEdit();
-    joint2 = new QLineEdit();
-    joint3 = new QLineEdit();
-    joint4 = new QLineEdit();
-    joint5 = new QLineEdit();
-    joint6 = new QLineEdit();
+    joint1 = new QLineEdit("-6");
+    joint2 = new QLineEdit("-30");
+    joint3 = new QLineEdit("12");
+    joint4 = new QLineEdit("0");
+    joint5 = new QLineEdit("-180");
+    joint6 = new QLineEdit("18");
     movejBtn = new QPushButton("moveJ");
     layout1->addRow("关节1：", joint1);
     layout1->addRow("关节2：", joint2);
@@ -47,12 +47,12 @@ void MainWindow::initUI() {//初始化界面
     layout1->addRow("关节6：", joint6);
     layout1->addRow(movejBtn);
 
-    xedit = new QLineEdit();
-    yedit = new QLineEdit();
-    zedit = new QLineEdit();
-    rxedit = new QLineEdit();
-    ryedit = new QLineEdit();
-    rzedit = new QLineEdit();
+    xedit = new QLineEdit("-0.321");
+    yedit = new QLineEdit("-0.03468");
+    zedit = new QLineEdit("-0.3656");
+    rxedit = new QLineEdit("2.4198");
+    ryedit = new QLineEdit("2.2844");
+    rzedit = new QLineEdit("2.0809");
     movelBtn = new QPushButton("moveL");
     layout1->addRow("x:", xedit);
     layout1->addRow("y:", yedit);

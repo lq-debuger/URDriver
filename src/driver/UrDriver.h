@@ -9,9 +9,14 @@
 #include <QString>
 #include <functional>
 #include "URScripts.h"
+#include <memory>
+#include "utils.h"
+#include <queue>
 using namespace std;
 class UrDriver: public QObject {
 private:
+    //指令的队列
+    queue<Instruction> instruction_queue;
     URScripts scripts;
     //连接成功的回调函数
     function<void()> connectCallback;
@@ -53,6 +58,12 @@ public:
 
     //发送脚本数据
     void sendscript();
+
+    //解析数据
+    void parseData(QByteArray array,URData urData);
+
+    //给队列中添加指令
+    void addInstruction(moveType type, double data[6], double acc, double vel);
 
 };
 
