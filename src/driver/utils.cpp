@@ -34,3 +34,13 @@ void reverseData(char *p, int size) {
         p[4] = tmp;
     }
 }
+
+/**
+ * 判断上一次指令是否执行完成
+ * @param targetInstruction
+ * @param urData
+ * @return
+ */
+bool hasCompleteLastInstruction(Instruction targetInstruction, URData urData) {
+    return false;
+}

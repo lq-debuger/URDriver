@@ -72,6 +72,7 @@ void UrDriver::signalAndSlot() {
         URData urData;
         parseData(data, urData);
         //判断是否要执行，从队列中获取第一个执行命令
+        decideExcuteInstruction(urData);
     });
 }
 
@@ -168,6 +169,66 @@ void UrDriver::addInstruction(moveType type, double data[6], double acc, double 
     instruction.acc = acc;
     instruction.vel = vel;
     instruction_queue.push(instruction);
+}
+
+/**
+ * 判断是否执行队列中的命令
+ * @param urData
+ */
+void UrDriver::decideExcuteInstruction(URData urData) {
+    //判断队列是否为空
+    if (instruction_queue.size() == 0) {
+        return;
+    }
+
+    //判断是否时第一次执行指令
+    if (isFirst) {
+        Instruction instruction = instruction_queue.front();
+        //执行指令
+        excuteInstruction(instruction);
+        //让执行的指令出队
+        instruction_queue.pop();
+        return;
+    }
+
+    //判断上一个指令是否执行完成
+    if (hasCompleteLastInstruction(targetInstruction, urData)) {
+        Instruction instruction = instruction_queue.front();
+        //执行指令
+        excuteInstruction(instruction);
+        //让执行的指令出队
+        instruction_queue.pop();
+    }
+}
+
+/**
+ * 执行指令
+ * @param instruction
+ */
+void UrDriver::excuteInstruction(Instruction instruction) {
+    moveType type = instruction.type;
+    if (type == MOVEJ) {
+        scripts.moveJ(instruction.data, instruction.acc, instruction.vel);
+    } else if (type == MOVEL) {
+        scripts.moveL(instruction.data, instruction.acc, instruction.vel);
+    }
+    //修改目标指令
+    modifyTargetInstruction(instruction);
+    //修改isfirst
+    isFirst = false;
+    //发送数据
+    sendscript();
+}
+
+/**
+ * 修改目标指令
+ * @param instruction
+ */
+void UrDriver::modifyTargetInstruction(Instruction instruction) {
+    targetInstruction.type = instruction.type;
+    mempcpy(targetInstruction.data, instruction.data, 48);
+    targetInstruction.vel = instruction.vel;
+    targetInstruction.acc = instruction.acc;
 }
 
 

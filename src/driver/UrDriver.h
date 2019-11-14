@@ -17,7 +17,11 @@ class UrDriver: public QObject {
 private:
     //指令的队列
     queue<Instruction> instruction_queue;
+    //目标指令
+    Instruction targetInstruction;
     URScripts scripts;
+    //是否第一次执行
+    bool isFirst = true;
     //连接成功的回调函数
     function<void()> connectCallback;
     //断开连接的回调函数
@@ -65,6 +69,14 @@ public:
     //给队列中添加指令
     void addInstruction(moveType type, double data[6], double acc, double vel);
 
+    //决定是否执行队列中的命令
+    void decideExcuteInstruction(URData urData);
+
+    //执行指令
+    void excuteInstruction(Instruction instruction);
+
+    //修改目标指令
+    void modifyTargetInstruction(Instruction instruction);
 };
 
 
