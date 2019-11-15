@@ -32,12 +32,12 @@ void MainWindow::initUI() {//初始化界面
     layout1->addRow(connectBtn);
     layout1->addRow(disconnectBtn);
 
-    joint1 = new QLineEdit("-6");
-    joint2 = new QLineEdit("-30");
-    joint3 = new QLineEdit("12");
-    joint4 = new QLineEdit("0");
-    joint5 = new QLineEdit("-180");
-    joint6 = new QLineEdit("18");
+    joint1 = new QLineEdit("-91.76");
+    joint2 = new QLineEdit("-98.96");
+    joint3 = new QLineEdit("-180");
+    joint4 = new QLineEdit("-46.29");
+    joint5 = new QLineEdit("91.39");
+    joint6 = new QLineEdit("-1.78");
     movejBtn = new QPushButton("moveJ");
     layout1->addRow("关节1：", joint1);
     layout1->addRow("关节2：", joint2);
@@ -47,12 +47,12 @@ void MainWindow::initUI() {//初始化界面
     layout1->addRow("关节6：", joint6);
     layout1->addRow(movejBtn);
 
-    xedit = new QLineEdit("-0.321");
-    yedit = new QLineEdit("-0.03468");
-    zedit = new QLineEdit("-0.3656");
-    rxedit = new QLineEdit("2.4198");
-    ryedit = new QLineEdit("2.2844");
-    rzedit = new QLineEdit("2.0809");
+    xedit = new QLineEdit("-7.016");
+    yedit = new QLineEdit("-29.22");
+    zedit = new QLineEdit("14.25");
+    rxedit = new QLineEdit("0.21");
+    ryedit = new QLineEdit("-179.85");
+    rzedit = new QLineEdit("20.31");
     movelBtn = new QPushButton("moveL");
     layout1->addRow("x:", xedit);
     layout1->addRow("y:", yedit);
@@ -67,6 +67,7 @@ MainWindow::~MainWindow() {}
 
 //连接机械臂
 void MainWindow::connectToRobot() {
+
     //获取ip和port
     QString ip = ipedit->text();
     int port = portedit->text().toInt();
@@ -119,6 +120,9 @@ void MainWindow::disConnectToRobot() {
  * movel的函数
  */
 void MainWindow::moveJ() {
+    if (connectStatus->text() != "已连接") {
+        return;
+    }
     //获取六个关节的值
     double j1 = joint1->text().toDouble()*DEGREETORAD;
     double j2 = joint2->text().toDouble()*DEGREETORAD;
@@ -126,7 +130,7 @@ void MainWindow::moveJ() {
     double j4 = joint4->text().toDouble()*DEGREETORAD;
     double j5 = joint5->text().toDouble()*DEGREETORAD;
     double j6 = joint6->text().toDouble()*DEGREETORAD;
-    double  arr[6]={j1,j2,j3,j4,j5,j6};
+    double arr[6]={j1,j2,j3,j4,j5,j6};
     //调用driver的方法
     UrDriver::getInstance()->moveJ(arr);
 }
@@ -135,13 +139,16 @@ void MainWindow::moveJ() {
  * moveJ的函数
  */
 void MainWindow::moveL() {
+    if (connectStatus->text() != "已连接") {
+        return;
+    }
     //获取位置和姿态的数据
-    double x = xedit->text().toDouble();
-    double y = yedit->text().toDouble();
-    double z = zedit->text().toDouble();
-    double rx = rxedit->text().toDouble();
-    double ry = ryedit->text().toDouble();
-    double rz = rzedit->text().toDouble();
+    double x = xedit->text().toDouble()*DEGREETORAD;
+    double y = yedit->text().toDouble()*DEGREETORAD;
+    double z = zedit->text().toDouble()*DEGREETORAD;
+    double rx = rxedit->text().toDouble()*DEGREETORAD;
+    double ry = ryedit->text().toDouble()*DEGREETORAD;
+    double rz = rzedit->text().toDouble()*DEGREETORAD;
     double pose[6] = {x, y, z, rx, ry, rz};
     UrDriver::getInstance()->moveL(pose);
 }

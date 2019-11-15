@@ -21,13 +21,13 @@ void URScripts::loadScripts(string path) {
         //把文件指针移到最后
         file.seekg(0, ios_base::end);
         //获取当前位置，得到文件的长度
-        int lenght = file.tellg();
+        int length = file.tellg();
         //字符数组
-        char buf[lenght];
+        char buf[length];
         //移动指针到最前面
         file.seekg(0, ios_base::beg);
         //读取
-        file.read(buf, lenght);
+        file.read(buf, length);
         //保存脚本
         baseString = QString(buf);
 //        qDebug()<< baseString << endl;

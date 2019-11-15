@@ -9,7 +9,7 @@
 #include <QString>
 #include <functional>
 #include "URScripts.h"
-#include <memory>
+#include <memory.h>
 #include "utils.h"
 #include <queue>
 using namespace std;
@@ -64,7 +64,7 @@ public:
     void sendscript();
 
     //解析数据
-    void parseData(QByteArray array,URData urData);
+    void parseData(QByteArray array,URData &urData);
 
     //给队列中添加指令
     void addInstruction(moveType type, double data[6], double acc, double vel);
